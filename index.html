@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CashFlow Manager - Complete System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header Styles */
+        .header {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            opacity: 0.9;
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .date-display {
+            background: #f0f2f5;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #555;
+        }
+
+        /* Dashboard Grid */
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        /* Card Styles */
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            border-bottom: 2px solid #f0f2f5;
+            padding-bottom: 10px;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .form-group input, 
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        /* Button Styles */
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+            width: 100%;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Summary Cards */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .summary-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .summary-card h3 {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .summary-card .amount {
+            font-size: 2em;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        /* Table Styles */
+        .table-container {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-top: 30px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #f8f9fa;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #555;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #f0f2f5;
+            color: #666;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .status-deposited {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        /* Photo Upload Area */
+        .photo-upload {
+            border: 2px dashed #667eea;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+
+        .photo-upload:hover {
+            background: #f8f9fa;
+        }
+
+        .photo-preview {
+            max-width: 100%;
+            max-height: 200px;
+            margin-top: 10px;
+            border-radius: 10px;
+        }
+
+        /* Photo Link */
+        .photo-link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .photo-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Login Container */
+        .login-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 400px;
+            margin: 50px auto;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .login-container h2 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+
+        .login-container input {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1.1em;
+        }
+
+        .login-container input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        /* Report Section */
+        .report-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .report-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            border-bottom: 2px solid #f0f2f5;
+            padding-bottom: 10px;
+        }
+
+        .report-actions {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .date-range {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .date-range input {
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+        }
+
+        .filter-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .filter-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .filter-options {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .filter-options select {
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            min-width: 150px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-close {
+            float: right;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .modal-close:hover {
+            color: #333;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            display: none;
+            z-index: 1001;
+            border-left: 4px solid #667eea;
+        }
+
+        .notification.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Loader */
+        .loader {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Error Box */
+        .error-box {
+            background: #fee;
+            border: 1px solid #fcc;
+            color: #c00;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            display: none;
+        }
+
+        .error-message {
+            color: #dc3545;
+            text-align: center;
+            padding: 10px;
+            margin: 10px 0;
+            background: #ffe6e6;
+            border-radius: 10px;
+        }
+
+        /* Section Visibility */
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .report-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div>
+                <h1>💰 CashFlow Manager</h1>
+                <p>Complete Store Cash Management System</p>
+            </div>
+            <div class="nav-buttons">
+                <button class="nav-btn active" onclick="showSection('entry')">📝 Entry</button>
+                <button class="nav-btn" onclick="showSection('admin')">👨‍💼 Admin</button>
+            </div>
+            <div class="date-display" id="currentDate"></div>
+        </div>
+
+        <!-- Firebase Error Box -->
+        <div id="firebaseError" class="error-box">
+            <strong>⚠️ Firebase Connection Error:</strong> <span id="errorMessage"></span>
+            <br><br>
+            <button onclick="location.reload()" class="btn" style="width:auto; padding:5px 15px;">Retry</button>
+        </div>
+
+        <!-- ========== ENTRY SECTION ========== -->
+        <div id="entrySection" class="section active">
+            <!-- Summary Cards -->
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <h3>Today's Cash in Store</h3>
+                    <div class="amount" id="todayCash">₹0</div>
+                </div>
+                <div class="summary-card">
+                    <h3>Billing Software Total</h3>
+                    <div class="amount" id="billingTotal">₹0</div>
+                </div>
+                <div class="summary-card">
+                    <h3>Pending Deposit</h3>
+                    <div class="amount" id="pendingDeposit">₹0</div>
+                </div>
+                <div class="summary-card">
+                    <h3>Total Bank Deposits</h3>
+                    <div class="amount" id="totalDeposits">₹0</div>
+                </div>
+            </div>
+
+            <!-- Entry Forms -->
+            <div class="dashboard">
+                <!-- Cashier Section -->
+                <div class="card">
+                    <h2>👤 Cashier Entry</h2>
+                    <form id="cashierForm">
+                        <div class="form-group">
+                            <label for="cashierName">Cashier Name</label>
+                            <input type="text" id="cashierName" required placeholder="Enter your name">
+                        </div>
+                        <div class="form-group">
+                            <label for="billingSoftware">Billing Software Total (₹)</label>
+                            <input type="number" id="billingSoftware" required placeholder="Enter billing software total" min="0" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label for="physicalCash">Physical Cash in Drawer (₹)</label>
+                            <input type="number" id="physicalCash" required placeholder="Enter physical cash count" min="0" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label for="cashNotes">Additional Notes</label>
+                            <textarea id="cashNotes" rows="3" placeholder="Any discrepancies or notes..."></textarea>
+                        </div>
+                        <button type="submit" class="btn" id="cashierSubmitBtn">Submit Cashier Entry</button>
+                    </form>
+                </div>
+
+                <!-- Accountant Section -->
+                <div class="card">
+                    <h2>👨‍💼 Accountant Entry</h2>
+                    <form id="accountantForm">
+                        <div class="form-group">
+                            <label for="accountantName">Accountant Name</label>
+                            <input type="text" id="accountantName" required placeholder="Enter your name">
+                        </div>
+                        <div class="form-group">
+                            <label for="depositAmount">Deposit Amount (₹)</label>
+                            <input type="number" id="depositAmount" required placeholder="Enter deposit amount" min="0" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label for="bankName">Bank Name</label>
+                            <select id="bankName" required>
+                                <option value="">Select Bank</option>
+                                <option value="SBI">State Bank of India</option>
+                                <option value="HDFC">HDFC Bank</option>
+                                <option value="ICICI">ICICI Bank</option>
+                                <option value="Axis">Axis Bank</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="transactionId">Transaction ID</label>
+                            <input type="text" id="transactionId" required placeholder="Enter transaction ID">
+                        </div>
+                        <div class="form-group">
+                            <label for="photoLink">Photo/Attachment Link</label>
+                            <input type="url" id="photoLink" placeholder="Enter Google Drive/Photo link">
+                        </div>
+                        <div class="form-group">
+                            <label for="depositNotes">Additional Notes</label>
+                            <textarea id="depositNotes" rows="3" placeholder="Any notes about the deposit..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-secondary" id="accountantSubmitBtn">Record Bank Deposit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== ADMIN SECTION ========== -->
+        <div id="adminSection" class="section">
+            <!-- Login Section -->
+            <div id="loginSection" class="login-container">
+                <h2>Admin Login</h2>
+                <input type="password" id="passcode" placeholder="Enter Passcode" onkeypress="handleKeyPress(event)">
+                <button class="btn" onclick="verifyPasscode()" style="width: 100%;">Login</button>
+                <div id="loginError" class="error-message" style="display: none;">Invalid passcode. Please try again.</div>
+            </div>
+
+            <!-- Admin Content (Hidden by default) -->
+            <div id="adminContent" style="display: none;">
+                <!-- Summary Cards -->
+                <div class="summary-grid">
+                    <div class="summary-card">
+                        <h3>Total Cashier Entries</h3>
+                        <div class="amount" id="totalCashierEntries">0</div>
+                    </div>
+                    <div class="summary-card">
+                        <h3>Total Bank Deposits</h3>
+                        <div class="amount" id="totalBankDeposits">0</div>
+                    </div>
+                    <div class="summary-card">
+                        <h3>Total Cash Collected</h3>
+                        <div class="amount" id="totalCashCollected">₹0</div>
+                    </div>
+                    <div class="summary-card">
+                        <h3>Total Deposited</h3>
+                        <div class="amount" id="totalDeposited">₹0</div>
+                    </div>
+                </div>
+
+                <!-- Report Actions -->
+                <div class="report-section">
+                    <h2>📊 Reports</h2>
+                    <div class="report-actions">
+                        <button class="btn" onclick="showShortReport()">📋 Short Report</button>
+                        <button class="btn btn-secondary" onclick="showDetailedReport()">📑 Detailed Report</button>
+                        <button class="btn btn-success" onclick="exportToExcel()">📥 Export to Excel</button>
+                        <button class="btn btn-secondary" onclick="exportToPDF()">📄 Export to PDF</button>
+                    </div>
+
+                    <!-- Date Range Filter -->
+                    <div class="filter-section">
+                        <h3>Filter by Date Range</h3>
+                        <div class="date-range">
+                            <input type="date" id="startDate">
+                            <input type="date" id="endDate">
+                            <button class="btn" onclick="filterByDate()" style="width: auto;">Apply Filter</button>
+                            <button class="btn btn-secondary" onclick="clearFilter()" style="width: auto;">Clear</button>
+                        </div>
+                    </div>
+
+                    <!-- Status Filter -->
+                    <div class="filter-section">
+                        <h3>Filter by Status</h3>
+                        <div class="filter-options">
+                            <select id="statusFilter" onchange="applyStatusFilter()">
+                                <option value="all">All Status</option>
+                                <option value="pending">Pending</option>
+                                <option value="marked">Marked</option>
+                                <option value="deposited">Deposited</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Report Display -->
+                <div class="report-section" id="reportDisplay">
+                    <h2 id="reportTitle">Short Report</h2>
+                    <div class="table-container">
+                        <table id="reportTable">
+                            <thead id="reportTableHead">
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Type</th>
+                                    <th>Person</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="reportTableBody">
+                                <tr>
+                                    <td colspan="5" style="text-align: center;">Select a report to view</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification"></div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
+        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyD2G7xz2jY5jYEXK1SZMAjasslfODRfoig",
+            authDomain: "jaipurians-53381.firebaseapp.com",
+            projectId: "jaipurians-53381",
+            storageBucket: "jaipurians-53381.firebasestorage.app",
+            messagingSenderId: "398545473628",
+            appId: "1:398545473628:web:ac77db139dd684447ad699",
+            measurementId: "G-ZM2HY38E9V"
+        };
+
+        // Initialize Firebase
+        let app, db, transactionsCol;
+        
+        try {
+            app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            transactionsCol = collection(db, 'transactions');
+            console.log('✅ Firebase initialized successfully');
+            document.getElementById('firebaseError').style.display = 'none';
+        } catch (error) {
+            console.error('❌ Firebase initialization error:', error);
+            document.getElementById('firebaseError').style.display = 'block';
+            document.getElementById('errorMessage').textContent = error.message;
+        }
+
+        // ========== GLOBAL VARIABLES ==========
+        let allTransactions = [];
+        let filteredTransactions = [];
+
+        // ========== HELPER FUNCTIONS ==========
+        window.showNotification = function(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.style.borderLeftColor = type === 'success' ? '#667eea' : '#dc3545';
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        };
+
+        window.showSection = function(section) {
+            // Update nav buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Show selected section
+            document.getElementById('entrySection').classList.remove('active');
+            document.getElementById('adminSection').classList.remove('active');
+            
+            if (section === 'entry') {
+                document.getElementById('entrySection').classList.add('active');
+            } else {
+                document.getElementById('adminSection').classList.add('active');
+            }
+        };
+
+        // Update current date
+        function updateDate() {
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-IN', options);
+        }
+        updateDate();
+
+        // ========== REAL-TIME DATA LISTENER ==========
+        if (db) {
+            const q = query(transactionsCol, orderBy('date', 'desc'));
+            
+            onSnapshot(q, (snapshot) => {
+                allTransactions = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                filteredTransactions = [...allTransactions];
+                
+                // Update entry section summary
+                const today = new Date().toDateString();
+                const todayCash = allTransactions
+                    .filter(t => new Date(t.date).toDateString() === today && t.physicalCash)
+                    .reduce((sum, t) => sum + t.physicalCash, 0);
+                const billingTotal = allTransactions
+                    .filter(t => new Date(t.date).toDateString() === today && t.billingSoftware)
+                    .reduce((sum, t) => sum + t.billingSoftware, 0);
+                const pendingDeposit = allTransactions
+                    .filter(t => t.type === 'Cashier Entry' && t.status === 'pending')
+                    .reduce((sum, t) => sum + (t.physicalCash || 0), 0);
+                const totalDeposits = allTransactions
+                    .filter(t => t.type === 'Bank Deposit')
+                    .reduce((sum, t) => sum + (t.depositAmount || 0), 0);
+
+                document.getElementById('todayCash').textContent = `₹${todayCash.toFixed(2)}`;
+                document.getElementById('billingTotal').textContent = `₹${billingTotal.toFixed(2)}`;
+                document.getElementById('pendingDeposit').textContent = `₹${pendingDeposit.toFixed(2)}`;
+                document.getElementById('totalDeposits').textContent = `₹${totalDeposits.toFixed(2)}`;
+
+                // Update admin summary
+                const totalCashierEntries = allTransactions.filter(t => t.type === 'Cashier Entry').length;
+                const totalBankDeposits = allTransactions.filter(t => t.type === 'Bank Deposit').length;
+                const totalCashCollected = allTransactions
+                    .filter(t => t.type === 'Cashier Entry')
+                    .reduce((sum, t) => sum + (t.physicalCash || 0), 0);
+                const totalDeposited = allTransactions
+                    .filter(t => t.type === 'Bank Deposit')
+                    .reduce((sum, t) => sum + (t.depositAmount || 0), 0);
+
+                document.getElementById('totalCashierEntries').textContent = totalCashierEntries;
+                document.getElementById('totalBankDeposits').textContent = totalBankDeposits;
+                document.getElementById('totalCashCollected').textContent = `₹${totalCashCollected.toFixed(2)}`;
+                document.getElementById('totalDeposited').textContent = `₹${totalDeposited.toFixed(2)}`;
+
+                // If admin is logged in, show default report
+                if (document.getElementById('adminContent').style.display === 'block') {
+                    showShortReport();
+                }
+            }, (error) => {
+                console.error('Listener error:', error);
+                document.getElementById('firebaseError').style.display = 'block';
+                document.getElementById('errorMessage').textContent = error.message;
+            });
+        }
+
+        // ========== CASHIER FORM ==========
+        document.getElementById('cashierForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            if (!db) {
+                window.showNotification('Firebase not initialized. Check rules.', 'error');
+                return;
+            }
+
+            const submitBtn = document.getElementById('cashierSubmitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="loader"></span> Saving...';
+
+            try {
+                await addDoc(transactionsCol, {
+                    date: new Date().toISOString(),
+                    type: 'Cashier Entry',
+                    person: document.getElementById('cashierName').value,
+                    billingSoftware: parseFloat(document.getElementById('billingSoftware').value),
+                    physicalCash: parseFloat(document.getElementById('physicalCash').value),
+                    notes: document.getElementById('cashNotes').value,
+                    status: 'pending',
+                    timestamp: new Date().toLocaleString()
+                });
+
+                window.showNotification('✅ Cashier entry saved successfully!');
+                e.target.reset();
+            } catch (error) {
+                console.error('Error:', error);
+                window.showNotification('❌ Error: ' + error.message, 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Submit Cashier Entry';
+            }
+        });
+
+        // ========== ACCOUNTANT FORM ==========
+        document.getElementById('accountantForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            if (!db) {
+                window.showNotification('Firebase not initialized. Check rules.', 'error');
+                return;
+            }
+
+            const submitBtn = document.getElementById('accountantSubmitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="loader"></span> Saving...';
+
+            try {
+                await addDoc(transactionsCol, {
+                    date: new Date().toISOString(),
+                    type: 'Bank Deposit',
+                    person: document.getElementById('accountantName').value,
+                    depositAmount: parseFloat(document.getElementById('depositAmount').value),
+                    bank: document.getElementById('bankName').value,
+                    transactionId: document.getElementById('transactionId').value,
+                    photoLink: document.getElementById('photoLink').value,
+                    notes: document.getElementById('depositNotes').value,
+                    status: 'deposited',
+                    timestamp: new Date().toLocaleString()
+                });
+
+                window.showNotification('✅ Bank deposit saved successfully!');
+                e.target.reset();
+            } catch (error) {
+                console.error('Error:', error);
+                window.showNotification('❌ Error: ' + error.message, 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Record Bank Deposit';
+            }
+        });
+
+        // ========== ADMIN FUNCTIONS ==========
+        window.verifyPasscode = function() {
+            const passcode = document.getElementById('passcode').value;
+            if (passcode === '333') {
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('adminContent').style.display = 'block';
+                showShortReport();
+            } else {
+                document.getElementById('loginError').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('loginError').style.display = 'none';
+                }, 3000);
+            }
+        };
+
+        window.handleKeyPress = function(event) {
+            if (event.key === 'Enter') {
+                verifyPasscode();
+            }
+        };
+
+        window.showShortReport = function() {
+            document.getElementById('reportTitle').textContent = '📋 Short Report - Summary View';
+            
+            let head = `
+                <tr>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Person</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                </tr>
+            `;
+            
+            let body = filteredTransactions.map(t => `
+                <tr>
+                    <td>${new Date(t.date).toLocaleDateString()}</td>
+                    <td>${t.type}</td>
+                    <td>${t.person}</td>
+                    <td>₹${(t.depositAmount || t.physicalCash || 0).toFixed(2)}</td>
+                    <td>
+                        <span class="status-badge ${t.status === 'deposited' ? 'status-deposited' : 'status-pending'}">
+                            ${t.status === 'deposited' ? '✅ Deposited' : t.status === 'marked' ? '📌 Marked' : '⏳ Pending'}
+                        </span>
+                    </td>
+                </tr>
+            `).join('');
+
+            document.getElementById('reportTableHead').innerHTML = head;
+            document.getElementById('reportTableBody').innerHTML = body || '<tr><td colspan="5" style="text-align: center;">No transactions found</td></tr>';
+        };
+
+        window.showDetailedReport = function() {
+            document.getElementById('reportTitle').textContent = '📑 Detailed Report - Complete Details';
+            
+            let head = `
+                <tr>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Type</th>
+                    <th>Person</th>
+                    <th>Billing Software</th>
+                    <th>Physical Cash</th>
+                    <th>Deposit Amount</th>
+                    <th>Bank</th>
+                    <th>Transaction ID</th>
+                    <th>Photo Link</th>
+                    <th>Notes</th>
+                    <th>Status</th>
+                </tr>
+            `;
+            
+            let body = filteredTransactions.map(t => `
+                <tr>
+                    <td>${new Date(t.date).toLocaleDateString()}</td>
+                    <td>${new Date(t.date).toLocaleTimeString()}</td>
+                    <td>${t.type}</td>
+                    <td>${t.person}</td>
+                    <td>${t.billingSoftware ? '₹' + t.billingSoftware.toFixed(2) : '-'}</td>
+                    <td>${t.physicalCash ? '₹' + t.physicalCash.toFixed(2) : '-'}</td>
+                    <td>${t.depositAmount ? '₹' + t.depositAmount.toFixed(2) : '-'}</td>
+                    <td>${t.bank || '-'}</td>
+                    <td>${t.transactionId || '-'}</td>
+                    <td>${t.photoLink ? `<a href="${t.photoLink}" target="_blank" class="photo-link">View Link</a>` : '-'}</td>
+                    <td>${t.notes || '-'}</td>
+                    <td>
+                        <span class="status-badge ${t.status === 'deposited' ? 'status-deposited' : 'status-pending'}">
+                            ${t.status === 'deposited' ? '✅ Deposited' : t.status === 'marked' ? '📌 Marked' : '⏳ Pending'}
+                        </span>
+                    </td>
+                </tr>
+            `).join('');
+
+            document.getElementById('reportTableHead').innerHTML = head;
+            document.getElementById('reportTableBody').innerHTML = body || '<tr><td colspan="12" style="text-align: center;">No transactions found</td></tr>';
+        };
+
+        window.filterByDate = function() {
+            const startDate = new Date(document.getElementById('startDate').value);
+            const endDate = new Date(document.getElementById('endDate').value);
+            endDate.setHours(23, 59, 59);
+
+            if (!startDate || !endDate) {
+                alert('Please select both start and end dates');
+                return;
+            }
+
+            filteredTransactions = allTransactions.filter(t => {
+                const transactionDate = new Date(t.date);
+                return transactionDate >= startDate && transactionDate <= endDate;
+            });
+
+            if (document.getElementById('reportTitle').textContent.includes('Short')) {
+                showShortReport();
+            } else {
+                showDetailedReport();
+            }
+        };
+
+        window.clearFilter = function() {
+            document.getElementById('startDate').value = '';
+            document.getElementById('endDate').value = '';
+            document.getElementById('statusFilter').value = 'all';
+            filteredTransactions = [...allTransactions];
+            
+            if (document.getElementById('reportTitle').textContent.includes('Short')) {
+                showShortReport();
+            } else {
+                showDetailedReport();
+            }
+        };
+
+        window.applyStatusFilter = function() {
+            const status = document.getElementById('statusFilter').value;
+            
+            if (status === 'all') {
+                filteredTransactions = [...allTransactions];
+            } else {
+                filteredTransactions = allTransactions.filter(t => t.status === status);
+            }
+
+            if (document.getElementById('reportTitle').textContent.includes('Short')) {
+                showShortReport();
+            } else {
+                showDetailedReport();
+            }
+        };
+
+        window.exportToExcel = function() {
+            let csv = '';
+            
+            if (document.getElementById('reportTitle').textContent.includes('Short')) {
+                csv = 'Date,Type,Person,Amount,Status\n';
+                filteredTransactions.forEach(t => {
+                    csv += `${new Date(t.date).toLocaleDateString()},${t.type},${t.person},${(t.depositAmount || t.physicalCash || 0).toFixed(2)},${t.status}\n`;
+                });
+            } else {
+                csv = 'Date,Time,Type,Person,Billing Software,Physical Cash,Deposit Amount,Bank,Transaction ID,Photo Link,Notes,Status\n';
+                filteredTransactions.forEach(t => {
+                    csv += `${new Date(t.date).toLocaleDateString()},${new Date(t.date).toLocaleTimeString()},${t.type},${t.person},`;
+                    csv += `${t.billingSoftware || ''},${t.physicalCash || ''},${t.depositAmount || ''},${t.bank || ''},`;
+                    csv += `${t.transactionId || ''},${t.photoLink || ''},${t.notes || ''},${t.status}\n`;
+                });
+            }
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `cashflow-report-${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        };
+
+        window.exportToPDF = function() {
+            window.print();
+        };
+    </script>
+</body>
+</html>

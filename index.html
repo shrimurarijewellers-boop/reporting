@@ -14,6 +14,8 @@
             --primary-accent: #5e5ce6; /* iOS Blue */
             --gold-accent: #ff9f0a; /* iOS Orange */
             --success: #30d158;
+            --warning: #ff9f0a;
+            --danger: #ff3b30;
             --text-dark: #1c1c1e;
             --text-light: #8e8e93;
         }
@@ -203,10 +205,33 @@
         .summary-card {
             text-align: center;
             padding: 20px;
+            position: relative;
+            overflow: hidden;
         }
         
         .summary-label { font-size: 0.9rem; color: var(--text-dark); opacity: 0.8; margin-bottom: 5px; }
         .summary-value { font-size: 2rem; font-weight: 700; color: var(--text-dark); }
+        .summary-sub {
+            font-size: 0.9rem;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid rgba(0,0,0,0.1);
+        }
+        .summary-sub-item {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 4px;
+        }
+        .positive { color: var(--success); font-weight: 600; }
+        .negative { color: var(--danger); font-weight: 600; }
+        .warning-badge {
+            background: rgba(255, 159, 10, 0.2);
+            color: var(--warning);
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
 
         /* --- TABLES --- */
         .table-container {
@@ -248,6 +273,8 @@
         }
         .badge-cash { background: rgba(94, 92, 230, 0.15); color: var(--primary-accent); }
         .badge-gold { background: rgba(255, 159, 10, 0.15); color: var(--gold-accent); }
+        .badge-success { background: rgba(48, 209, 88, 0.15); color: var(--success); }
+        .badge-warning { background: rgba(255, 159, 10, 0.15); color: var(--warning); }
 
         .link-btn {
             color: var(--primary-accent);
@@ -342,14 +369,28 @@
             </div>
 
             <div class="dashboard-grid">
-                <!-- Summary -->
+                <!-- Summary Cards - Now with Total - Deposited -->
                 <div class="glass-panel summary-card">
-                    <div class="summary-label">Cash in Drawer (Today)</div>
-                    <div class="summary-value" id="cash-today">₹0</div>
+                    <div class="summary-label">💰 Total Cash Received</div>
+                    <div class="summary-value" id="cash-total">₹0</div>
+                    <div class="summary-sub">
+                        <div class="summary-sub-item">
+                            <span>Deposited:</span>
+                            <span class="positive" id="cash-deposited">₹0</span>
+                        </div>
+                        <div class="summary-sub-item">
+                            <span>Pending in Store:</span>
+                            <span class="negative" id="cash-pending">₹0</span>
+                        </div>
+                    </div>
                 </div>
+                
                 <div class="glass-panel summary-card">
-                    <div class="summary-label">Pending Deposit</div>
-                    <div class="summary-value" id="cash-pending">₹0</div>
+                    <div class="summary-label">📊 Today's Activity</div>
+                    <div class="summary-value" id="cash-today">₹0</div>
+                    <div class="summary-sub">
+                        <span class="warning-badge">Today's Entry</span>
+                    </div>
                 </div>
             </div>
 
@@ -421,13 +462,28 @@
             </div>
 
             <div class="dashboard-grid">
+                <!-- Summary Cards - Now with Total - Deposited -->
                 <div class="glass-panel summary-card">
-                    <div class="summary-label">Gold in Drawer (Today)</div>
-                    <div class="summary-value" id="gold-today">0.00 g</div>
+                    <div class="summary-label">🌟 Total Gold Received</div>
+                    <div class="summary-value" id="gold-total">0.00 g</div>
+                    <div class="summary-sub">
+                        <div class="summary-sub-item">
+                            <span>Deposited:</span>
+                            <span class="positive" id="gold-deposited">0.00 g</span>
+                        </div>
+                        <div class="summary-sub-item">
+                            <span>Pending in Store:</span>
+                            <span class="negative" id="gold-pending">0.00 g</span>
+                        </div>
+                    </div>
                 </div>
+                
                 <div class="glass-panel summary-card">
-                    <div class="summary-label">Gold Pending Deposit</div>
-                    <div class="summary-value" id="gold-pending">0.00 g</div>
+                    <div class="summary-label">📊 Today's Activity</div>
+                    <div class="summary-value" id="gold-today">0.00 g</div>
+                    <div class="summary-sub">
+                        <span class="warning-badge">Today's Entry</span>
+                    </div>
                 </div>
             </div>
 
@@ -489,23 +545,36 @@
             <!-- Dashboard Content -->
             <div id="admin-content" class="hidden" style="display:none;">
                 
-                <!-- Summary Cards -->
+                <!-- Summary Cards - Now with Total - Deposited -->
                 <div class="dashboard-grid">
                     <div class="glass-panel summary-card">
-                        <div class="summary-label">Total Cash (In)</div>
-                        <div class="summary-value" id="adm-cash-in">₹0</div>
+                        <div class="summary-label">💰 Total Cash Received</div>
+                        <div class="summary-value" id="adm-cash-total">₹0</div>
+                        <div class="summary-sub">
+                            <div class="summary-sub-item">
+                                <span>Deposited:</span>
+                                <span class="positive" id="adm-cash-deposited">₹0</span>
+                            </div>
+                            <div class="summary-sub-item">
+                                <span>Pending:</span>
+                                <span class="negative" id="adm-cash-pending">₹0</span>
+                            </div>
+                        </div>
                     </div>
+                    
                     <div class="glass-panel summary-card">
-                        <div class="summary-label">Total Cash (Deposited)</div>
-                        <div class="summary-value" id="adm-cash-out">₹0</div>
-                    </div>
-                    <div class="glass-panel summary-card">
-                        <div class="summary-label">Total Gold (In)</div>
-                        <div class="summary-value" id="adm-gold-in">0.00 g</div>
-                    </div>
-                    <div class="glass-panel summary-card">
-                        <div class="summary-label">Total Gold (Out)</div>
-                        <div class="summary-value" id="adm-gold-out">0.00 g</div>
+                        <div class="summary-label">🌟 Total Gold Received</div>
+                        <div class="summary-value" id="adm-gold-total">0.00 g</div>
+                        <div class="summary-sub">
+                            <div class="summary-sub-item">
+                                <span>Deposited:</span>
+                                <span class="positive" id="adm-gold-deposited">0.00 g</span>
+                            </div>
+                            <div class="summary-sub-item">
+                                <span>Pending:</span>
+                                <span class="negative" id="adm-gold-pending">0.00 g</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -540,7 +609,7 @@
     <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
-        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, getDocs, writeBatch, where } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
 
         const firebaseConfig = {
             apiKey: "AIzaSyD2G7xz2jY5jYEXK1SZMAjasslfODRfoig",
@@ -581,6 +650,41 @@
             setTimeout(() => t.classList.remove('show'), 3000);
         };
 
+        // Function to clear pending entries when deposit is made
+        async function clearPendingEntries(type, amount) {
+            try {
+                // Query for pending entries of the specified type
+                const q = query(col, where('type', '==', type === 'cash' ? 'Cashier Entry' : 'Gold Entry'), where('status', '==', 'pending'));
+                const querySnapshot = await getDocs(q);
+                
+                if (!querySnapshot.empty) {
+                    const batch = writeBatch(db);
+                    let remainingAmount = amount;
+                    
+                    querySnapshot.forEach((doc) => {
+                        if (remainingAmount <= 0) return;
+                        
+                        const data = doc.data();
+                        const entryAmount = type === 'cash' ? data.physicalCash : data.weight;
+                        
+                        if (entryAmount <= remainingAmount) {
+                            // Mark this entire entry as deposited
+                            batch.update(doc.ref, { 
+                                status: 'deposited',
+                                depositDate: new Date().toISOString()
+                            });
+                            remainingAmount -= entryAmount;
+                        }
+                    });
+                    
+                    await batch.commit();
+                    console.log(`Cleared pending ${type} entries`);
+                }
+            } catch (error) {
+                console.error('Error clearing pending entries:', error);
+            }
+        }
+
         // --- DATA SYNC ---
         const q = query(col, orderBy('date', 'desc'));
         onSnapshot(q, (snap) => {
@@ -589,6 +693,7 @@
             // If admin is open and unlocked, refresh report
             if(document.getElementById('admin-content').style.display !== 'none') {
                 generateReport(currentReportMode);
+                updateAdminStats();
             }
         });
 
@@ -596,18 +701,29 @@
         function updateDashboard() {
             const todayStr = new Date().toDateString();
 
-            // Cash
+            // Cash calculations
+            const cashTotal = allData.filter(t => t.type === 'Cashier Entry').reduce((a,b) => a + (b.physicalCash||0), 0);
+            const cashDeposited = allData.filter(t => t.type === 'Bank Deposit').reduce((a,b) => a + (b.depositAmount||0), 0);
+            const cashPending = cashTotal - cashDeposited;
             const cashToday = allData.filter(t => new Date(t.date).toDateString() === todayStr && t.type === 'Cashier Entry').reduce((a,b) => a + (b.physicalCash||0), 0);
-            const cashPending = allData.filter(t => t.type === 'Cashier Entry' && t.status === 'pending').reduce((a,b) => a + (b.physicalCash||0), 0);
             
-            // Gold
+            // Gold calculations
+            const goldTotal = allData.filter(t => t.type === 'Gold Entry').reduce((a,b) => a + (b.weight||0), 0);
+            const goldDeposited = allData.filter(t => t.type === 'Gold Deposit').reduce((a,b) => a + (b.weight||0), 0);
+            const goldPending = goldTotal - goldDeposited;
             const goldToday = allData.filter(t => new Date(t.date).toDateString() === todayStr && t.type === 'Gold Entry').reduce((a,b) => a + (b.weight||0), 0);
-            const goldPending = allData.filter(t => t.type === 'Gold Entry' && t.status === 'pending').reduce((a,b) => a + (b.weight||0), 0);
 
+            // Update Cash Page
+            document.getElementById('cash-total').innerText = `₹${cashTotal.toFixed(2)}`;
+            document.getElementById('cash-deposited').innerText = `₹${cashDeposited.toFixed(2)}`;
+            document.getElementById('cash-pending').innerText = `₹${Math.max(0, cashPending).toFixed(2)}`;
             document.getElementById('cash-today').innerText = `₹${cashToday.toFixed(2)}`;
-            document.getElementById('cash-pending').innerText = `₹${cashPending.toFixed(2)}`;
+
+            // Update Gold Page
+            document.getElementById('gold-total').innerText = `${goldTotal.toFixed(2)} g`;
+            document.getElementById('gold-deposited').innerText = `${goldDeposited.toFixed(2)} g`;
+            document.getElementById('gold-pending').innerText = `${Math.max(0, goldPending).toFixed(2)} g`;
             document.getElementById('gold-today').innerText = `${goldToday.toFixed(2)} g`;
-            document.getElementById('gold-pending').innerText = `${goldPending.toFixed(2)} g`;
         }
 
         // --- ADMIN REPORT LOGIC ---
@@ -643,7 +759,7 @@
                             <td><span class="badge ${isGold ? 'badge-gold' : 'badge-cash'}">${t.type}</span></td>
                             <td>${t.person}</td>
                             <td style="font-weight:700;">${val}</td>
-                            <td>${t.status === 'deposited' ? '✅ Done' : '⏳ Pending'}</td>
+                            <td><span class="badge ${t.status === 'deposited' ? 'badge-success' : 'badge-warning'}">${t.status === 'deposited' ? '✅ Done' : '⏳ Pending'}</span></td>
                         </tr>`;
                 });
 
@@ -657,13 +773,13 @@
                         <th>Value</th>
                         <th>Details (Bank/Recipient)</th>
                         <th>Receipt/Link</th>
-                        <th>Notes</th>
+                        <th>Status</th>
                     </tr>`;
 
                 allData.forEach(t => {
                     const isGold = t.type.includes('Gold');
                     const date = new Date(t.date).toLocaleDateString();
-                    let val = '-', details = '-', link = '-', notes = '-';
+                    let val = '-', details = '-', link = '-';
 
                     if(t.weight) val = `${t.weight.toFixed(2)} g`;
                     if(t.physicalCash || t.depositAmount) val = `₹${(t.physicalCash || t.depositAmount).toFixed(2)}`;
@@ -677,8 +793,6 @@
                         link = `<a href="${url}" target="_blank" class="link-btn">View Link</a>`;
                     }
 
-                    if(t.notes) notes = t.notes;
-
                     html += `
                         <tr>
                             <td>${date}</td>
@@ -687,7 +801,7 @@
                             <td style="font-weight:700;">${val}</td>
                             <td>${details}</td>
                             <td>${link}</td>
-                            <td style="font-size:0.85em; color:#666;">${notes}</td>
+                            <td><span class="badge ${t.status === 'deposited' ? 'badge-success' : 'badge-warning'}">${t.status === 'deposited' ? '✅ Done' : '⏳ Pending'}</span></td>
                         </tr>`;
                 });
             }
@@ -696,15 +810,24 @@
         };
 
         function updateAdminStats() {
-            const cIn = allData.filter(t => t.type === 'Cashier Entry').reduce((a,b) => a + (b.physicalCash||0), 0);
-            const cOut = allData.filter(t => t.type === 'Bank Deposit').reduce((a,b) => a + (b.depositAmount||0), 0);
-            const gIn = allData.filter(t => t.type === 'Gold Entry').reduce((a,b) => a + (b.weight||0), 0);
-            const gOut = allData.filter(t => t.type === 'Gold Deposit').reduce((a,b) => a + (b.weight||0), 0);
+            // Cash calculations
+            const cashTotal = allData.filter(t => t.type === 'Cashier Entry').reduce((a,b) => a + (b.physicalCash||0), 0);
+            const cashDeposited = allData.filter(t => t.type === 'Bank Deposit').reduce((a,b) => a + (b.depositAmount||0), 0);
+            const cashPending = cashTotal - cashDeposited;
+            
+            // Gold calculations
+            const goldTotal = allData.filter(t => t.type === 'Gold Entry').reduce((a,b) => a + (b.weight||0), 0);
+            const goldDeposited = allData.filter(t => t.type === 'Gold Deposit').reduce((a,b) => a + (b.weight||0), 0);
+            const goldPending = goldTotal - goldDeposited;
 
-            document.getElementById('adm-cash-in').innerText = `₹${cIn.toFixed(2)}`;
-            document.getElementById('adm-cash-out').innerText = `₹${cOut.toFixed(2)}`;
-            document.getElementById('adm-gold-in').innerText = `${gIn.toFixed(2)} g`;
-            document.getElementById('adm-gold-out').innerText = `${gOut.toFixed(2)} g`;
+            // Update Admin Stats
+            document.getElementById('adm-cash-total').innerText = `₹${cashTotal.toFixed(2)}`;
+            document.getElementById('adm-cash-deposited').innerText = `₹${cashDeposited.toFixed(2)}`;
+            document.getElementById('adm-cash-pending').innerText = `₹${Math.max(0, cashPending).toFixed(2)}`;
+            
+            document.getElementById('adm-gold-total').innerText = `${goldTotal.toFixed(2)} g`;
+            document.getElementById('adm-gold-deposited').innerText = `${goldDeposited.toFixed(2)} g`;
+            document.getElementById('adm-gold-pending').innerText = `${Math.max(0, goldPending).toFixed(2)} g`;
         }
 
         // --- ADMIN SECURITY ---
@@ -771,19 +894,27 @@
         // 2. Cash Deposit
         document.getElementById('depositForm').addEventListener('submit', async(e) => {
             e.preventDefault();
+            
+            const depositAmount = parseFloat(document.getElementById('depAmount').value);
+            
+            // First, record the deposit
             await addDoc(col, {
                 date: new Date().toISOString(),
                 type: 'Bank Deposit',
                 person: document.getElementById('accName').value,
-                depositAmount: parseFloat(document.getElementById('depAmount').value),
+                depositAmount: depositAmount,
                 bank: document.getElementById('bankName').value,
                 txnId: document.getElementById('txnId').value,
                 receiptLink: document.getElementById('cashReceiptLink').value, 
                 notes: '',
                 status: 'deposited'
             });
+            
+            // Then clear pending cash entries (set in-hand to 0)
+            await clearPendingEntries('cash', depositAmount);
+            
             e.target.reset();
-            showToast('Bank deposit saved!');
+            showToast('Bank deposit saved and pending cash cleared!');
         });
 
         // 3. Gold Entry
@@ -804,17 +935,25 @@
         // 4. Gold Deposit
         document.getElementById('goldDepForm').addEventListener('submit', async(e) => {
             e.preventDefault();
+            
+            const depositWeight = parseFloat(document.getElementById('goldDepWeight').value);
+            
+            // First, record the gold deposit
             await addDoc(col, {
                 date: new Date().toISOString(),
                 type: 'Gold Deposit',
                 person: document.getElementById('goldRecipient').value,
-                weight: parseFloat(document.getElementById('goldDepWeight').value),
+                weight: depositWeight,
                 receiptLink: document.getElementById('goldReceipt').value,
                 notes: '',
                 status: 'deposited'
             });
+            
+            // Then clear pending gold entries (set in-hand to 0)
+            await clearPendingEntries('gold', depositWeight);
+            
             e.target.reset();
-            showToast('Gold deposit saved!');
+            showToast('Gold deposit saved and pending gold cleared!');
         });
 
     </script>
